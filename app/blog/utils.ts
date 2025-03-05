@@ -3,7 +3,10 @@ import path from 'path'
 import { remark } from 'remark'
 import remarkRehype from 'remark-rehype'
 import rehypeStringify from 'rehype-stringify'
+import rehypeHighlight from 'rehype-highlight'
 import rehypeAddClasses from 'rehype-add-classes'
+
+import 'highlight.js/styles/atom-one-dark.css'
 
 type Metadata = {
   title: string
@@ -96,14 +99,24 @@ export function formatDate(date: string, includeRelative = false) {
 export async function markdownToHtml(markdown) {
   const result = await remark()
     .use(remarkRehype)
+    .use(rehypeHighlight) // <-- Add this plugin for syntax highlighting
     .use(rehypeAddClasses, {
-      // Map element names to class names. For example:
-      h1: 'text-3xl font-semibold tracking-tighter',
-      h2: 'text-2xl font-semibold tracking-tighter',
-      h3: 'text-1xl font-semibold tracking-tighter',
-      p: 'custom-paragraph-class',
-      // add more element mappings as needed
+      h1: 'text-2xl font-semibold tracking-tighter',
+      h2: 'my-3 text-xl font-semibold tracking-tighter',
+      h3: 'text-lg font-semibold tracking-tighter',
+      h4: 'text-base font-semibold tracking-tighter',
+      h5: 'text-sm font-semibold tracking-tighter',
+      h6: 'text-xs font-semibold tracking-tighter',
+      img: 'my-8',
+      ol: 'mb-4 font-semibold list-decimal list-inside',
+      ul: 'mb-4 list-disc list-inside',
+      p: 'mb-4',
+      code: 'bg-gray-100 text-red-600',
+      hr: 'my-4',
+      blockquote: 'border-l-4 border-gray-300 pl-4 italic my-4',
+      pre: 'bg-gray-900 p-4 rounded my-4 overflow-x-auto',
     })
+    
     .use(rehypeStringify)
     .process(markdown)
   return result.toString()

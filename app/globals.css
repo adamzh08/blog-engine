@@ -31,3 +31,7 @@ html {
   color: var(--foreground);
   font-family: main_font;
 }
+
+pre code {
+  background: transparent !important;
+}
