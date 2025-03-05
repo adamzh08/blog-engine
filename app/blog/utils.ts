@@ -1,7 +1,9 @@
 import fs from 'fs'
 import path from 'path'
 import { remark } from 'remark'
-import html from 'remark-html'
+import remarkRehype from 'remark-rehype'
+import rehypeStringify from 'rehype-stringify'
+import rehypeAddClasses from 'rehype-add-classes'
 
 type Metadata = {
   title: string
@@ -91,9 +93,18 @@ export function formatDate(date: string, includeRelative = false) {
   return `${fullDate} (${formattedDate})`
 }
 
-export async function markdownToHtml(markdown: string) {
+export async function markdownToHtml(markdown) {
   const result = await remark()
-    .use(html)
+    .use(remarkRehype)
+    .use(rehypeAddClasses, {
+      // Map element names to class names. For example:
+      h1: 'text-3xl font-semibold tracking-tighter',
+      h2: 'text-2xl font-semibold tracking-tighter',
+      h3: 'text-1xl font-semibold tracking-tighter',
+      p: 'custom-paragraph-class',
+      // add more element mappings as needed
+    })
+    .use(rehypeStringify)
     .process(markdown)
   return result.toString()
 }

@@ -17,7 +17,7 @@ export default async function Page({ params }: {
 
   return (
     <article className="prose dark:prose-invert">
-      <h1>{post.metadata.title}</h1>
+      <h1 className='text-3xl font-semibold tracking-tighter'>{post.metadata.title}</h1>
       <div 
         dangerouslySetInnerHTML={{ __html: content }} 
       />
